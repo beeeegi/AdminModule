@@ -1,2 +1,72 @@
-# AdminModule
-Roblox Admin Commands System Based On New BanAPI
+# Admin Module
+This project is a comprehensive Roblox Admin Commands System based on the new BanAPI. It includes functionalities for banning and unbanning players, checking player ban history, and retrieving player IDs, all integrated with Discord for notification and logging purposes.
+
+## Features
+`-` Temporarily or permanently ban players with a reason.
+
+`-` Remove bans from players.
+
+`-` Retrieve the ban history log file of a player.
+
+`-` Retrieve a player's ID based on their username.
+
+`-` Sends notifications to a Discord webhook for all actions.
+
+
+## Installation
+
+`1.` Place **AdminModule** ModuleScript in the *ReplicatedStorage*.
+
+`2.` Inside the **AdminModule** Place RemoteEvent with name: **CommandFeedbackEvent** and **Config** ModuleScript.
+
+`3.` Place **CommandHandler** ServerScript in the *ServerScriptService*.
+
+`4.` Place **CommandFeedback** ScreenGui in the *StarterGui*.
+
+`5.` Edit the **Config** ModuleScript.
+
+## Usage
+
+```
+/ban <PlayerID> <Duration> <Reason>
+```
+
+`PlayerID` - The ID of the player to be banned.  [REQUIRED]
+
+`Duration` - The duration of the ban (e.g., 10s, 5m, 2h, 1d). *Use -1 for permanent ban.*  [OPTIONAL]
+
+`Reason` - The reason for the ban. [OPTIONAL]
+
+```
+/unban <PlayerID>
+```
+
+`PlayerID` - The ID of the player to be unbanned.  [REQUIRED]
+
+```
+/checkhistory <PlayerID>
+```
+
+`PlayerID` - The ID of the player whose ban history you want to check.  [REQUIRED]
+
+```
+/getid <Username>
+```
+
+`Username` - The username of the player whose ID you want to retrieve.  [REQUIRED]
+
+### Example
+To ban a player with ID 12345 for 10 minutes with the reason Spamming, an admin would type:
+```
+/ban 12345 10m Spamming
+```
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/beeeegi/AdminModule/blob/main/LICENSE) file for details.
+
+## Credits
+Written by [Begi](https://github.com/beeeegi)
+
+Contributor: [zero](https://github.com/xd3d9)
+
+Special thanks to the Roblox Developer Community for the continuous support and resources.
