@@ -14,6 +14,7 @@ This project is a comprehensive Roblox Admin Commands System based on the new Ba
 
 
 ## Installation
+`0.` Download the module from [here](https://devforum.roblox.com/t/open-source-adminmodule-roblox-admin-commands-system-based-on-new-banapi/3064385)
 
 `1.` Place **AdminModule** ModuleScript in the *ReplicatedStorage*.
 
