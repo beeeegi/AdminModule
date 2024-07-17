@@ -71,6 +71,11 @@ To ban a player with ID 12345 for 10 minutes with the reason Spamming, an admin 
 
 ![image](https://github.com/user-attachments/assets/891f60c9-71f1-4df6-b5db-dce4a50a6613)
 
+Updated version
+
+![image](https://github.com/user-attachments/assets/69fe95fd-3808-4195-8628-95522067242b)
+
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/beeeegi/AdminModule/blob/main/LICENSE) file for details.
 
