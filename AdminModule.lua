@@ -71,9 +71,10 @@ function AdminModule.BanPlayer(id, durationStr, reason, adminPlayer)
 	end
 
 	local embed = Config.Embeds.Ban
+	embed.description = "[Target's Roblox Profile]("..getProfileLink(id)..")"
 	embed.fields[1].value = tostring(id)
 	embed.fields[2].value = displayDuration
-	embed.fields[3].value = reason -- #reason >= 1900 and string.sub(reason,1, 1900) or reason
+	embed.fields[3].value = reason
 	embed.fields[4].value = adminPlayer.Name
 	embed.footer = { text = os.date("%X | %d.%m.%Y") }
 	
@@ -111,6 +112,7 @@ function AdminModule.UnbanPlayer(id: IntValue, adminPlayer: Player)
 
 	if success then
 		local embed = Config.Embeds.Unban
+		embed.description = "[Target's Roblox Profile]("..getProfileLink(id)..")"
 		embed.fields[1].value = tostring(id)
 		embed.fields[2].value = adminPlayer.Name
 		embed.footer = { text = os.date("%X | %d.%m.%Y") }
@@ -174,7 +176,7 @@ function AdminModule.CheckPlayerHistory(id, adminPlayer)
 			}
 
 			local embed = Config.Embeds.CheckHistory
-			embed.description = embed.description:gsub("{TargetID}", tostring(id))
+			embed.description = "[Target's Roblox Profile]("..getProfileLink(id)..")"
 			embed.fields[1].value = adminPlayer.Name
 			embed.footer = { text = os.date("%X | %d.%m.%Y") }
 
@@ -188,7 +190,7 @@ function AdminModule.CheckPlayerHistory(id, adminPlayer)
 			end
 		else
 			local embed = Config.Embeds.CheckHistory
-			embed.description = embed.description:gsub("{TargetID}", tostring(id))
+			embed.description = "[Target's Roblox Profile]("..getProfileLink(id)..")"
 			embed.fields[1].value = adminPlayer.Name
 			embed.footer = { text = os.date("%X | %d.%m.%Y") }
 
@@ -210,6 +212,7 @@ function AdminModule.GetPlayerID(username, adminPlayer)
 
 	if success then
 		local embed = Config.Embeds.GetID
+		embed.description = "[Target's Roblox Profile]("..getProfileLink(playerId)..")"
 		embed.fields[1].value = username
 		embed.fields[2].value = tostring(playerId)
 		embed.fields[3].value = adminPlayer.Name
