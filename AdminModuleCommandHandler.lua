@@ -34,8 +34,6 @@ local function processCommand(player, message)
 				reason = table.concat(args, " ", 2)
 			end
 
-			print(targetID, duration, reason)
-
 			if targetID then
 				AdminModule.BanPlayer(targetID, duration, reason, player)
 			else
@@ -86,7 +84,7 @@ end
 -- Listen for player chats
 Players.PlayerAdded:Connect(function(player)
 	if isAdmin(player) then
-		Config.Remotes.CommandFeedbackEvent:FireClient(player, "AdminModule is activated for you.")
+		Config.Remotes.CommandFeedbackEvent:FireClient(player, "AdminModule is activated for you. Toggle menu: "..tostring(Config.ToggleKey))
 	end
 	
 	player.Chatted:Connect(function(message)	
@@ -96,3 +94,20 @@ Players.PlayerAdded:Connect(function(player)
 	end)
 end)
 
+
+Config.Remotes.CommandsFromUI.OnServerEvent:Connect(function(player, command, parameter)
+	if command == "GetID" then
+		local username = parameter
+		AdminModule.GetPlayerID(username, player)
+	elseif command == "Unban" then
+		local id = parameter
+		AdminModule.UnbanPlayer(id, player)
+	elseif command == "CheckHistory" then
+		local id = parameter
+		AdminModule.CheckPlayerHistory(id, player)
+	end
+end)
+
+Config.Remotes.BanFromUI.OnServerEvent:Connect(function(player, id, duration, reason)	
+	AdminModule.BanPlayer(id, duration, reason, player)
+end)
