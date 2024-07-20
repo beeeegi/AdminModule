@@ -7,15 +7,18 @@ local Config = {}
 
 -- Remote Events
 Config.Remotes = {
-	CommandFeedbackEvent = script.Parent:WaitForChild("CommandFeedbackEvent")
+	CommandFeedbackEvent = script.Parent:WaitForChild("CommandFeedbackEvent"),
+	CommandsFromUI = script.Parent:WaitForChild("ExecuteCommandFromUI"),
+	BanFromUI = script.Parent:WaitForChild("BanFromUI")
 }
 
 -- General Settings
 Config.CommandPrefix = "/"
 Config.AdminUserIds = {1234, 4321} -- Add admin UserIds here
+Config.ToggleKey = Enum.KeyCode.F4	-- Only change the key. Do not touch Enum.KeyCode.
 
 -- Webhook Settings
-Config.WebhookURL = "your_webhook"
+Config.WebhookURL = "your_webhook_here"
 
 -- Ban Settings
 Config.BanApplyToUniverse = true
@@ -51,7 +54,6 @@ Config.Embeds = {
 	CheckHistory = {
 		title = "Ban History",
 		color = 0xffff00,
-		description = "Ban history for player with ID: {TargetID}",
 		fields = {
 			{ name = "Admin", value = "{Admin}", inline = false },
 		}
@@ -69,8 +71,8 @@ Config.Embeds = {
 
 -- Reason Placeholders
 Config.ReasonPlaceholders = {
-	NoReason = "No reason specified.",
-	ReasonTemplate = "\nFor more details or ban appeal contact us on Discord."	-- use "\n" to create a new line
+	NoReason = "No reason specified",
+	ReasonTemplate = ". For more details or ban appeal please contact us." -- DO NOT USE SPECIAL CHARACTERS
 }
 
 -- Messages Configuration
