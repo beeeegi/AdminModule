@@ -18,17 +18,15 @@ This project is a comprehensive Roblox Admin Commands System based on the new Ba
 
 `1.` Place **AdminModule** ModuleScript in the *ReplicatedStorage*.
 
-`2.` Inside the **AdminModule** Place RemoteEvent with name: **CommandFeedbackEvent** and **Config** ModuleScript.
+`2.` Place **AdminModuleCommandHandler** ServerScript in the *ServerScriptService*.
 
-`3.` Place **CommandHandler** ServerScript in the *ServerScriptService*.
+`3.` Place **AdminModule** ScreenGui in the *StarterGui*.
 
-`4.` Place **CommandFeedback** ScreenGui in the *StarterGui*.
+`4.` Edit the **Config** ModuleScript.
 
-`5.` Edit the **Config** ModuleScript.
+`5.` Make sure that files are placed correctly, like in the screenshot:
 
-`6.` Make sure that files are placed correctly, like in the screenshot:
-
-![image](https://github.com/user-attachments/assets/1c4f8176-6eee-4522-bc32-550620cd7dd3)
+![image](https://github.com/user-attachments/assets/abcfc352-5cdc-424e-968b-25ad6b078c4c)
 
 
 ## Usage
@@ -74,6 +72,10 @@ To ban a player with ID 12345 for 10 minutes with the reason Spamming, an admin 
 Updated version
 
 ![image](https://github.com/user-attachments/assets/69fe95fd-3808-4195-8628-95522067242b)
+
+GUI
+
+![image](https://github.com/user-attachments/assets/5b565306-928c-4b18-960d-0bd7422a802c)
 
 
 ## License
