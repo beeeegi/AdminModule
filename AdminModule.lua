@@ -83,7 +83,7 @@ function AdminModule.BanPlayer(id, durationStr, reason, adminPlayer)
 	local config = {
 		UserIds = { id },
 		Duration = duration,
-		DisplayReason = "\nReason: " .. displayReason,
+		DisplayReason = "Reason: " .. displayReason,
 		PrivateReason = os.date("%X | %d.%m.%Y"),
 		ApplyToUniverse = Config.BanApplyToUniverse,
 		ExcludeAltAccounts = Config.BanExcludeAltAccounts
