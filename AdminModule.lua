@@ -1,106 +1,14 @@
 --[[
-    Written by Begi.
-    AdminModule - Roblox Admin Commands System Based On New BanAPI.
+	Written by Begi.
+	AdminModule: Roblox Admin Commands System Based On New BanAPI.
 --]]
 
 local AdminModule = {}
+local Config = require(script.Config)
 
 -- Services
 local players = game:GetService("Players")
 local httpService = game:GetService("HttpService")
-
--- Configuration Settings
-AdminModule.Config = {}
-
--- Remote Events
-AdminModule.Config.Remotes = {
-	CommandFeedbackEvent = script.Parent:WaitForChild("CommandFeedbackEvent"),
-	CommandsFromUI = script.Parent:WaitForChild("ExecuteCommandFromUI"),
-	BanFromUI = script.Parent:WaitForChild("BanFromUI")
-}
-
--- General Settings
-AdminModule.Config.CommandPrefix = "/"
-AdminModule.Config.AdminUserIds = {1234, 4321, 265075019} -- Add admin UserIds here
-AdminModule.Config.ToggleKey = Enum.KeyCode.F4	-- Only change the key. Do not touch Enum.KeyCode.
-
--- Webhook Settings
-AdminModule.Config.WebhookURL = "your_webhook_here"
-
--- Ban Settings
-AdminModule.Config.BanApplyToUniverse = true
-AdminModule.Config.BanExcludeAltAccounts = true
-
--- Unban Settings
-AdminModule.Config.UnbanExcludeAltAccounts = true
-
--- History Settings
-AdminModule.Config.SendTxt = true
-AdminModule.Config.TxtDividerCharacter = "#"
-
--- Embeds Configuration
-AdminModule.Config.Embeds = {
-	Ban = {
-		title = "Player Banned",
-		color = 0xff0000,
-		fields = {
-			{ name = "Target ID", value = "{TargetID}", inline = true },
-			{ name = "Duration", value = "{Duration}", inline = false },
-			{ name = "Reason", value = "{Reason}", inline = true },
-			{ name = "Admin", value = "{Admin}", inline = false }
-		}
-	},
-	Unban = {
-		title = "Player Unbanned",
-		color = 0x00ff00,
-		fields = {
-			{ name = "Target ID", value = "{TargetID}", inline = true },
-			{ name = "Admin", value = "{Admin}", inline = false }
-		}
-	},
-	CheckHistory = {
-		title = "Ban History",
-		color = 0xffff00,
-		fields = {
-			{ name = "Admin", value = "{Admin}", inline = false },
-		}
-	},
-	GetID = {
-		title = "Get Player ID",
-		color = 0x0000ff,
-		fields = {
-			{ name = "Target", value = "{Target}", inline = true },
-			{ name = "TargetID", value = "{TargetID}", inline = true },
-			{ name = "Admin", value = "{Admin}", inline = false },	
-		}
-	}
-}
-
--- Reason Placeholders
-AdminModule.Config.ReasonPlaceholders = {
-	NoReason = "No reason specified",
-	ReasonTemplate = ". For more details or ban appeal please contact us." -- DO NOT USE SPECIAL CHARACTERS
-}
-
--- Messages Configuration
-AdminModule.Config.Messages = {
-	Ban = {
-		Success = "Player banned successfully.",
-		Failure = "Failed to ban player. {Error}"
-	},
-	Unban = {
-		Success = "Player unbanned successfully.",
-		Failure = "Failed to unban player. {Error}"
-	},
-	CheckHistory = {
-		Success = "Ban history retrieved successfully.",
-		Failure = "Failed to retrieve ban history. {Error}"
-	},
-	GetID = {
-		Success = "User ID is: {UserID}",
-		Failure = "Failed to retrieve user ID. {Error}"
-	}
-}
 
 -- Helper function to send a message to a Discord webhook
 local function sendDiscordMessage(embed)    
@@ -108,7 +16,7 @@ local function sendDiscordMessage(embed)
 	local headers = { ["Content-Type"] = "application/json" }
 
 	local success, error = pcall(function()
-		local v1 = httpService:PostAsync(AdminModule.Config.WebhookURL, data, Enum.HttpContentType.ApplicationJson)
+		local v1 = httpService:PostAsync(Config.WebhookURL, data, Enum.HttpContentType.ApplicationJson)
 	end)
 	if not success then
 		warn("Failed to send message to Discord: " .. tostring(error))
@@ -159,26 +67,26 @@ function AdminModule.BanPlayer(id, durationStr, reason, adminPlayer)
 	end
 
 	if not reason or reason == "" then
-		reason = AdminModule.Config.ReasonPlaceholders.NoReason
+		reason = Config.ReasonPlaceholders.NoReason
 	end
 
-	local embed = AdminModule.Config.Embeds.Ban
+	local embed = Config.Embeds.Ban
 	embed.description = "[Target's Roblox Profile]("..getProfileLink(id)..")"
 	embed.fields[1].value = tostring(id)
 	embed.fields[2].value = displayDuration
 	embed.fields[3].value = reason
 	embed.fields[4].value = adminPlayer.Name
 	embed.footer = { text = os.date("%X | %d.%m.%Y") }
-
-	local displayReason = reason..AdminModule.Config.ReasonPlaceholders.ReasonTemplate
-
+	
+	local displayReason = reason..Config.ReasonPlaceholders.ReasonTemplate
+	
 	local config = {
 		UserIds = { id },
 		Duration = duration,
 		DisplayReason = "Reason: " .. displayReason,
 		PrivateReason = os.date("%X | %d.%m.%Y"),
-		ApplyToUniverse = AdminModule.Config.BanApplyToUniverse,
-		ExcludeAltAccounts = AdminModule.Config.BanExcludeAltAccounts
+		ApplyToUniverse = Config.BanApplyToUniverse,
+		ExcludeAltAccounts = Config.BanExcludeAltAccounts
 	}
 
 	local success, error = pcall(function()
@@ -186,9 +94,9 @@ function AdminModule.BanPlayer(id, durationStr, reason, adminPlayer)
 	end)
 	if success then
 		sendDiscordMessage(embed)
-		AdminModule.Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, AdminModule.Config.Messages.Ban.Success)
+		Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, Config.Messages.Ban.Success)
 	else
-		AdminModule.Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, AdminModule.Config.Messages.Ban.Failure:gsub("{Error}", tostring(error)))
+		Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, Config.Messages.Ban.Failure:gsub("{Error}", tostring(error)))
 	end
 end
 
@@ -197,22 +105,22 @@ function AdminModule.UnbanPlayer(id: IntValue, adminPlayer: Player)
 	local success, error = pcall(function()
 		local config = {
 			UserIds = { id },
-			ApplyToUniverse = AdminModule.Config.UnbanExcludeAltAccounts
+			ApplyToUniverse = Config.UnbanExcludeAltAccounts
 		}
 		players:UnbanAsync(config)
 	end)
 
 	if success then
-		local embed = AdminModule.Config.Embeds.Unban
+		local embed = Config.Embeds.Unban
 		embed.description = "[Target's Roblox Profile]("..getProfileLink(id)..")"
 		embed.fields[1].value = tostring(id)
 		embed.fields[2].value = adminPlayer.Name
 		embed.footer = { text = os.date("%X | %d.%m.%Y") }
 
 		sendDiscordMessage(embed)
-		AdminModule.Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, AdminModule.Config.Messages.Unban.Success)
+		Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, Config.Messages.Unban.Success)
 	else
-		AdminModule.Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, AdminModule.Config.Messages.Unban.Failure:gsub("{Error}", tostring(error)))
+		Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, Config.Messages.Unban.Failure:gsub("{Error}", tostring(error)))
 	end
 end
 
@@ -236,8 +144,8 @@ function AdminModule.CheckPlayerHistory(id, adminPlayer)
 				table.insert(results, result)
 			end
 		end
-
-		if AdminModule.Config.SendTxt then
+		
+		if Config.SendTxt then
 			local logContent = ""
 			for index, result in ipairs(results) do
 				logContent = logContent .. "##############################################\n"
@@ -261,27 +169,27 @@ function AdminModule.CheckPlayerHistory(id, adminPlayer)
 			}
 
 			local request = {
-				Url = AdminModule.Config.WebhookURL,
+				Url = Config.WebhookURL,
 				Method = "POST",
 				Headers = headers,
 				Body = body
 			}
 
-			local embed = AdminModule.Config.Embeds.CheckHistory
+			local embed = Config.Embeds.CheckHistory
 			embed.description = "[Target's Roblox Profile]("..getProfileLink(id)..")"
 			embed.fields[1].value = adminPlayer.Name
 			embed.footer = { text = os.date("%X | %d.%m.%Y") }
 
 			sendDiscordMessage(embed)
 			local response = httpService:RequestAsync(request)
-
+			
 			if response.Success then
-				AdminModule.Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, AdminModule.Config.Messages.CheckHistory.Success)
+				Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, Config.Messages.CheckHistory.Success)
 			else
-				AdminModule.Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, AdminModule.Config.Messages.CheckHistory.Failure:gsub("{Error}", tostring(response.StatusMessage)))
+				Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, Config.Messages.CheckHistory.Failure:gsub("{Error}", tostring(response.StatusMessage)))
 			end
 		else
-			local embed = AdminModule.Config.Embeds.CheckHistory
+			local embed = Config.Embeds.CheckHistory
 			embed.description = "[Target's Roblox Profile]("..getProfileLink(id)..")"
 			embed.fields[1].value = adminPlayer.Name
 			embed.footer = { text = os.date("%X | %d.%m.%Y") }
@@ -289,11 +197,12 @@ function AdminModule.CheckPlayerHistory(id, adminPlayer)
 			sendDiscordMessage(embed)
 		end
 
-
+		
 	else
-		AdminModule.Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, AdminModule.Config.Messages.CheckHistory.Failure:gsub("{Error}", tostring(banHistory)))
+		Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, Config.Messages.CheckHistory.Failure:gsub("{Error}", tostring(banHistory)))
 	end
 end
+
 
 -- Function to get player ID from username
 function AdminModule.GetPlayerID(username, adminPlayer)
@@ -302,7 +211,7 @@ function AdminModule.GetPlayerID(username, adminPlayer)
 	end)
 
 	if success then
-		local embed = AdminModule.Config.Embeds.GetID
+		local embed = Config.Embeds.GetID
 		embed.description = "[Target's Roblox Profile]("..getProfileLink(playerId)..")"
 		embed.fields[1].value = username
 		embed.fields[2].value = tostring(playerId)
@@ -310,9 +219,9 @@ function AdminModule.GetPlayerID(username, adminPlayer)
 		embed.footer = { text = os.date("%X | %d.%m.%Y") }
 
 		sendDiscordMessage(embed)
-		AdminModule.Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, AdminModule.Config.Messages.GetID.Success:gsub("{UserID}", tostring(playerId)))
+		Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, Config.Messages.GetID.Success:gsub("{UserID}", tostring(playerId)))
 	else
-		AdminModule.Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, AdminModule.Config.Messages.GetID.Failure:gsub("{Error}", tostring(error)))
+		Config.Remotes.CommandFeedbackEvent:FireClient(adminPlayer, Config.Messages.GetID.Failure:gsub("{Error}", tostring(error)))
 	end
 end
 
