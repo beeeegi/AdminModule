@@ -84,6 +84,4 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 ## Credits
 Written by [Begi](https://github.com/beeeegi)
 
-Contributor: [zero](https://github.com/xd3d9)
-
 Special thanks to the Roblox Developer Community for the continuous support and resources.
